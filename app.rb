@@ -33,6 +33,8 @@ get '/sign_out' do
 end
 
 get '/meetups' do
+  @meetups = Meetup.paginate(:page => params[:page], :per_page => 1)
+
   erb :'meetups/index'
 end
 

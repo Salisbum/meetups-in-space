@@ -1,1 +1,7 @@
 <h1>Meetups</h1>
+  <br>
+  <%= will_paginate @meetups %>
+  <br>
+  <% @meetups.each do |meetup| %>
+    <%= meetup.title %>
+  <% end %>
