@@ -1,15 +1,27 @@
 require 'spec_helper'
 
 feature "User views meetup list" do
-  meetup_1 = Meetup.create(title: "Earth Viewing", description: "Let's view the earth!", meetup_date: "05/01/2016", user_id: 1, location_id: 1)
 
-  meetup_2 = Meetup.create(title: "Fire Breathing", description: "I am a DRAGON.", meetup_date: "05/06/2016", user_id: 2, location_id: 2)
 
   scenario "goes to meetups list page" do
+    Meetup.create(title: "Earth Viewing", description: "Let's view the earth!", meetup_date: "05/01/2016", user_id: 1, location_id: 1)
+
+    Meetup.create(title: "Dangerous Atmospheres", description: "DON'T BREATH", meetup_date: "10/06/2016", user_id: rand(1..3), location_id: rand(1..9))
+
+    Meetup.create(title: "Fire Breathing", description: "I am a DRAGON.", meetup_date: "05/06/2016", user_id: 2, location_id: 2)
+
+    Meetup.create(title: "Broken Record", description: "Bad karaoke.", meetup_date: "06/06/2016", user_id: rand(1..3), location_id: rand(1..9))
+
+    Meetup.create(title: "Crab Hunting", description: "Tasty shells.", meetup_date: "06/24/2016", user_id: rand(1..3), location_id: rand(1..8))
+
     visit '/'
 
-    expect(page).to have_content "Earth Viewing"
-    expect(page).to have_content "Fire Breathing"
+    expect(page).to have_content "Broken Record"
+    expect(page).to have_content "Crab Hunting"
+    expect(page).to have_content "Dangerous Atmospheres"
+
+    expect(page).to_not have_content "Fire Breathing"
+
   end
 
 

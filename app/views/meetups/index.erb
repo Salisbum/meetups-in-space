@@ -3,5 +3,7 @@
   <%= will_paginate @meetups %>
   <br>
   <% @meetups.each do |meetup| %>
-    <%= meetup.title %>
+    <li><a href="/meetups/<%= meetup.id %>"><%= meetup.title %></li>
   <% end %>
+<br><br>
+<a href="/meetups/new_meetup">New Meetup</a>
