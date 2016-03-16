@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 feature "User views meetup list" do
+  let(:user) do
+  User.create(
+    provider: "github",
+    uid: "1",
+    username: "jarlax1",
+    email: "jarlax1@launchacademy.com",
+    avatar_url: "https://avatars2.githubusercontent.com/u/174825?v=3&s=400 (85KB)"
+  )
+  end
 
   scenario "goes to meetups list page" do
     Location.create(name: "Mercury")
@@ -9,7 +18,7 @@ feature "User views meetup list" do
 
     User.create(
       provider: "github",
-      uid: "1",
+      uid: "2",
       username: "herp",
       email: "herp@gmail.com",
       avatar_url: "https://avatars2.githubusercontent.com/u/174825?v=3&s=400"
@@ -42,6 +51,7 @@ feature "User views meetup list" do
     Meetup.create(title: "Crab Hunting", description: "Tasty shells.", meetup_date: "06/24/2016", user_id: 2, location_id: 1)
 
     visit '/meetups'
+    sign_in_as user
 
     expect(page).to have_content "Broken Record"
     click_link "Broken Record"

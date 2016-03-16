@@ -102,10 +102,28 @@ get '/meetups/new_meetup' do
 end
 
 get '/meetups/:id' do
- @meetup = Meetup.find(params[:id])
- @creator = User.find(@meetup.user_id)
- @attendees = Attendee.where(meetup: @meetup)
- @users = @attendees.pluck(:user_id)
+  current_user
+  @meetup = Meetup.find(params[:id])
+  @creator = User.find(@meetup.user_id)
+  @attendees = Attendee.where(meetup: @meetup)
+  @users = @attendees.pluck(:user_id)
+
+  id = params[:id]
 
  erb :'meetups/show'
+end
+
+post '/meetups/:id/join' do
+  current_user
+  id = params[:id]
+
+  if @current_user.nil?
+    flash[:notice] = 'Please sign in before joining meetups'
+  else
+    @meetup = Meetup.find_by(id: id)
+    Attendee.create(user_id: @current_user.id, meetup_id: id)
+    flash[:notice] = 'You have joined the meetup.'
+  end
+
+  redirect "/meetups/#{id}"
 end
