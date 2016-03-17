@@ -17,12 +17,19 @@
     <% end %>
 
 
+    <% if @current_user.nil? %>
+    <%= flash[:notice] = 'Please sign in before joining meetups' %>
+    <form method="post" action="/meetups/<%= @meetup.id %>/join">
+      <input type="submit" name= "join" value="Join" />
+    </form>
+    <% elsif %>
     <% @current_attendees = @attendees.pluck(:user_id) %>
-     <% unless @current_attendees.include?(@current_user.id) %>
-     <form method="post" action="/meetups/<%= @meetup.id %>/join">
-       <input type="submit" name= "join" value="Join" />
-     </form>
-   <% end %> 
+      <% unless @current_attendees.include?(@current_user.id) %>
+      <form method="post" action="/meetups/<%= @meetup.id %>/join">
+        <input type="submit" name= "join" value="Join" />
+      </form>
+    <% end %>
+    <% end %> 
 
 
   </body>

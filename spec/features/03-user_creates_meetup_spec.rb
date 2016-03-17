@@ -1,28 +1,26 @@
+
 require 'spec_helper'
 
 feature "User creates a new meetup" do
-
-    let(:user) do
-      User.create(
-        provider: "github",
-        uid: "1",
-        username: "jarlax1",
-        email: "jarlax1@launchacademy.com",
-        avatar_url: "https://avatars2.githubusercontent.com/u/174825?v=3&s=400"
-      )
-    end
+  let(:user) do
+    User.create(
+      provider: "github",
+      uid: "1",
+      username: "jarlax1",
+      email: "jarlax1@launchacademy.com",
+      avatar_url: "https://avatars2.githubusercontent.com/u/174825?v=3&s=400 (85KB)"
+    )
+  end
 
   scenario "goes to meetups create new page" do
     visit '/meetups'
-    sign_in_as user
 
     expect(page).to have_link 'New Meetup'
   end
 
   scenario "goes to meetups create new page" do
     visit '/meetups'
-    sign_in_as user
-    
+
     click_link 'New Meetup'
 
     expect(page).to have_content "Create a New Meetup"
@@ -31,30 +29,30 @@ feature "User creates a new meetup" do
     expect(page).to have_content "Description:"
   end
 
-  scenario "user may view their meetup on the index page" do
+  scenario "user may create a meetup and view it on the index page" do
     Location.create(name: "Jupiter")
     Location.create(name: "Venus")
     Location.create(name: "Earth")
 
-     visit '/meetups'
-     sign_in_as user
+    visit '/meetups'
+    sign_in_as user
 
-     expect(page).to have_content "You're now signed in as #{user.username}!"
-     click_link "New Meetup"
+    expect(page).to have_content "You're now signed in as #{user.username}!"
+    click_link "New Meetup"
 
-     fill_in "Title:", with: "Amazing Race: Jupiter"
-     select "Jupiter", :from => "location"
-     fill_in "Date of meetup:", with: "03/17/2017"
-     fill_in "Description:", with: "Race across the biggest planet in our solar system!"
-     click_button "Submit"
+    fill_in "Title:", with: "Amazing Race: Jupiter"
+    select "Jupiter", :from => "location"
+    fill_in "Date of meetup:", with: "03/17/2017"
+    fill_in "Description:", with: "Race across the biggest planet in our solar system!"
+    click_button "Submit"
 
-     expect(page).to have_content "Amazing Race: Jupiter"
-    end
+    expect(page).to have_content "Amazing Race: Jupiter"
+  end
 
-   scenario "user creates a faulty meetup" do
-   Location.create(name: "Jupiter")
-   Location.create(name: "Venus")
-   Location.create(name: "Earth")
+  scenario "user creates an invalid meetup" do
+    Location.create(name: "Jupiter")
+    Location.create(name: "Venus")
+    Location.create(name: "Earth")
 
     visit '/meetups'
     sign_in_as user
@@ -69,6 +67,7 @@ feature "User creates a new meetup" do
     click_button "Submit"
 
     expect(page).to have_content "Please make sure you've filled in all of the fields."
+    expect(find_field('Title').value).to eq "Hoarding 101"
 
     fill_in "Description:", with: "How to stack newspapers evenly."
     select "Jupiter", :from => "location"
@@ -76,5 +75,5 @@ feature "User creates a new meetup" do
     click_button "Submit"
 
     expect(page).to have_content "Hoarding 101"
-  end
- end
+   end
+end
